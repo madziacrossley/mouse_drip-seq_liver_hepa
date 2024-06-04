@@ -12,3 +12,11 @@ DRIP peaks from mouse HEPA1-6 cells and liver tissue are included (annotated wit
 
 mm10_gencodev25_basic.6cols.bed
 Also are included the mm10 genes used for analysis (e.g. RNA-seq, TSS and TES plots).
+
+drip_seq_peaks_analysis_puzzo_crossley_et_al.ipynb
+Python code used for Figure 1
+
+G4_around_peaks_puzzo_crossley_et_al.ipynb
+Python code used for Extended Fig 2
+
+
