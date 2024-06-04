@@ -101,13 +101,14 @@ awk 'BEGIN{OFS="\t"}{print($1,$2,$3,$4,$5,$6)}' liver_merged_IP_vs_IN_peaks.broa
 #Now overlap peaks with mm10 genes to get those that are + or - stranded and also genic vs intergenic
 
 #First do a stranded slop on full mm10 genes file - to include 3kb upstream of TSS and 3Kb downstream of TES. And define these as genic regions
-gunzip mm10_gencodevm23.bed.gz
-cut -f 1,2,3,4,5,6 mm10_gencodevm23.bed > mm10_gencodevm23.6cols.bed
-bedtools slop -i mm10_gencodevm23.6cols.bed -g mm10.chrom.sizes -b 3000 > mm10_3kb_slop_genes.bed
+#Download from UCSC genome browser
+cut -f 1,2,3,4,5,6 mm10_gencodev25.basic.bed > mm10_v25_basic.6col.bed
+bedtools slop -i mm10_v25_basic.6col.bed -g mm10.chrom.sizes -b 3000 > mm10_v25_3kb_slop_genes.bed
 
 #Intersect mm10 genes with DRIP peaks
-bedtools intersect -wao -a hepa_peaks.bed -b mm10_3kb_slop_genes.bed > hepa_peaks_slop_3kb_full_genes.tsv
-bedtools intersect -wao -a liver_peaks.bed -b mm10_3kb_slop_genes.bed > liver_peaks_slop_3kb_full_genes.tsv
+bedtools intersect -wo -b hepa_annotated_peaks.bed  -a mm10_v25_3kb_slop_genes.bed > hepa_intersect_v25_genes.tsv
+bedtools intersect -wo -b liver_annotated_peaks.bed  -a mm10_v25_3kb_slop_genes.bed > liver_intersect_v25_genes.tsv
+
 #assign gene strand to peak strand
 
 #Use deeptools to generate plots over TSS and over peak centers, binsize 75
@@ -116,10 +117,11 @@ cat sample_names.txt | xargs -I % computeMatrix reference-point -R hepa_annotate
 cat sample_names.txt | xargs -I % computeMatrix reference-point -R liver_annotated_peaks.bed -S bigwigs_re/%.bw --outFileName deeptools_liver_bin75/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint center
 
 #Over mm10 genes TSS and TES
-cat sample_names.txt | xargs -I % computeMatrix reference-point -R mm10_gencodevm23.6cols.bed -S bigwigs_re/%.bw --outFileName deeptools_tss_bin75/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint TSS
-cat sample_names.txt | xargs -I % computeMatrix reference-point -R mm10_gencodevm23.6cols.bed -S bigwigs_re/%.bw --outFileName deeptools_tes_bin75/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint TES
+cat sample_names.txt | xargs -I % computeMatrix reference-point -R mm10_v25_basic.6col.bed -S bigwigs_re/%.bw --outFileName deeptools_tss_bin75/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint TSS
+cat sample_names.txt | xargs -I % computeMatrix reference-point -R mm10_v25_basic.6col.bed -S bigwigs_re/%.bw --outFileName deeptools_tes_bin75/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint TES
 
-#Nucleotide content over peaks
+
+# Nucleotide content over peaks
 bedtools nuc -fi mm10.fa -bed hepa_annotated_peaks.bed   > hepa_annotated_peaks.bed.nuc_content.txt
 bedtools nuc -fi mm10.fa -bed liver_annotated_peaks.bed  > liver_annotated_peaks.bed.nuc_content.txt
 
