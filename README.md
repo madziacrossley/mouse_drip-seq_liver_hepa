@@ -10,5 +10,5 @@ liver_annotated_peaks.bed
 
 DRIP peaks from mouse HEPA1-6 cells and liver tissue are included (annotated with strand from gene strand they intersect)
 
-mm10_gencodevm23.6cols.bed
+mm10_gencodev25_basic.6cols.bed
 Also are included the mm10 genes used for analysis (e.g. RNA-seq, TSS and TES plots).
