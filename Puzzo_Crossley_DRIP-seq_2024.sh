@@ -108,13 +108,18 @@ bedtools slop -i mm10_gencodevm23.6cols.bed -g mm10.chrom.sizes -b 3000 > mm10_3
 #Intersect mm10 genes with DRIP peaks
 bedtools intersect -wao -a hepa_peaks.bed -b mm10_3kb_slop_genes.bed > hepa_peaks_slop_3kb_full_genes.tsv
 bedtools intersect -wao -a liver_peaks.bed -b mm10_3kb_slop_genes.bed > liver_peaks_slop_3kb_full_genes.tsv
-
 #assign gene strand to peak strand
-#Use deeptools to generate plots over TSS and over peak centers
-cat sample_names.txt | xargs -I % computeMatrix reference-point -R mm10_gencodevm23.6cols.bed -S bigwigs/%.bw --outFileName deeptools/tss/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint TSS
-cat sample_names2.txt | xargs -I % computeMatrix reference-point -R hepa_annotated_peaks.bed -S bigwigs/%.bw --outFileName deeptools/hepa_center/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint center
 
-#Get nucleotide content over peaks
+#Use deeptools to generate plots over TSS and over peak centers, binsize 75
+#DRIP peak centers
+cat sample_names.txt | xargs -I % computeMatrix reference-point -R hepa_annotated_peaks.bed -S bigwigs_re/%.bw --outFileName deeptools_hepa_bin75/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint center
+cat sample_names.txt | xargs -I % computeMatrix reference-point -R liver_annotated_peaks.bed -S bigwigs_re/%.bw --outFileName deeptools_liver_bin75/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint center
+
+#Over mm10 genes TSS and TES
+cat sample_names.txt | xargs -I % computeMatrix reference-point -R mm10_gencodevm23.6cols.bed -S bigwigs_re/%.bw --outFileName deeptools_tss_bin75/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint TSS
+cat sample_names.txt | xargs -I % computeMatrix reference-point -R mm10_gencodevm23.6cols.bed -S bigwigs_re/%.bw --outFileName deeptools_tes_bin75/%.matrix -bs 75 -a 7500 -b 7500 -p 8 --referencePoint TES
+
+#Nucleotide content over peaks
 bedtools nuc -fi mm10.fa -bed hepa_annotated_peaks.bed   > hepa_annotated_peaks.bed.nuc_content.txt
 bedtools nuc -fi mm10.fa -bed liver_annotated_peaks.bed  > liver_annotated_peaks.bed.nuc_content.txt
 
