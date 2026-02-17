@@ -1,5 +1,5 @@
 # mouse_drip-seq_liver_hepa
-DRIP-seq analysis in mouse HEPA1-6 and liver tissue, as described in https://www.biorxiv.org/content/10.1101/2024.05.07.592855v1 which is currently in revision.
+DRIP-seq analysis in mouse HEPA1-6 and liver tissue, as described in DOI: 10.1016/j.ymthe.2024.09.035.
 
 Puzzo_Crossley_DRIP-seq_2024.sh ;
 This is the script used to align raw sequencing reads to the mm10 genome and generate DRIP-seq tracks.
